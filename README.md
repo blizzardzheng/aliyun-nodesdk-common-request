@@ -1,6 +1,6 @@
 # aliyun-sdk-node-request
 
-用 nodeJS 实现了阿里云 [http接口协议](https://help.aliyun.com/document_detail/25492.html) 并对特殊配置做了封装，可以一些服务作为 aliyun-sdk-node 的通用request层
+用 nodeJS 实现了阿里云 [http接口协议](https://help.aliyun.com/document_detail/25492.html) 并对特殊配置做了封装，可以作为 aliyun-sdk-node 的通用 request 层
 
 ### 安装
 npm install aliyun-sdk-node-request --save
