@@ -1,0 +1,31 @@
+{
+  "name": "aliyun-sdk-node-request",
+  "version": "0.0.2",
+  "description": "spec common request param for aliyun sdk node version",
+  "main": "dist/index.js",
+  "scripts": {
+    "dev": "tsc lib/** -outDir dist --watch",
+    "build": "rm dist/** && tsc lib/** -outDir dist",
+    "test": "mocha -r ts-node/register ./tests/*.test.ts"
+  },
+  "author": "candy.zhengxq@gmail.com",
+  "typings": "./index.d.ts",
+  "license": "ISC",
+  "dependencies": {
+    "@types/node": "^11.11.3",
+    "hmacsha1": "^1.0.0",
+    "is-buffer": "^2.0.3",
+    "promised-pipe": "^1.1.1",
+    "request": "^2.88.0",
+    "request-promise": "^4.2.4",
+    "utf8": "^3.0.0",
+    "uuid": "^3.3.2"
+  },
+  "devDependencies": {
+    "@types/mocha": "^5.2.6",
+    "@types/should": "^13.0.0",
+    "ts-node": "^8.0.3",
+    "typescript": "^3.3.3333",
+    "mocha": "^6.0.2"
+  }
+}
