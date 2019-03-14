@@ -1,61 +1,26 @@
 "use strict";
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-var __generator = (this && this.__generator) || function (thisArg, body) {
-    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
-    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
-    function verb(n) { return function (v) { return step([n, v]); }; }
-    function step(op) {
-        if (f) throw new TypeError("Generator is already executing.");
-        while (_) try {
-            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
-            if (y = 0, t) op = [op[0] & 2, t.value];
-            switch (op[0]) {
-                case 0: case 1: t = op; break;
-                case 4: _.label++; return { value: op[1], done: false };
-                case 5: _.label++; y = op[1]; op = [0]; continue;
-                case 7: op = _.ops.pop(); _.trys.pop(); continue;
-                default:
-                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
-                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
-                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
-                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
-                    if (t[2]) _.ops.pop();
-                    _.trys.pop(); continue;
-            }
-            op = body.call(thisArg, _);
-        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
-        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
-    }
-};
-exports.__esModule = true;
-var uuid = require('uuid');
-var flat_1 = require("./flat");
-var encode3986_1 = require("./encode3986");
-var hmacsha1 = require('hmacsha1');
-var utf8 = require('utf8');
-var pipe = require('promised-pipe');
-var request = require('request-promise');
+Object.defineProperty(exports, "__esModule", { value: true });
+const uuid = require('uuid');
+const flat_1 = require("./flat");
+const encode3986_1 = require("./encode3986");
+const hmacsha1 = require('hmacsha1');
+const utf8 = require('utf8');
+const pipe = require('promised-pipe');
+const request = require('request-promise');
 function percentEncode(str) {
-    return str ? encode3986_1["default"](str) : '';
+    return str ? encode3986_1.default(str) : '';
 }
 function stringToSign(str) {
-    var tmp = "GET&" + percentEncode('/') + "&" + percentEncode(str);
+    const tmp = `GET&${percentEncode('/')}&${percentEncode(str)}`;
     return tmp;
 }
 function hhmac(secret) {
-    var wrapperedSecret = secret + "&";
-    return function (last) { return hmacsha1(wrapperedSecret, last); };
+    const wrapperedSecret = `${secret}&`;
+    return (last) => hmacsha1(wrapperedSecret, last);
 }
 ;
-var Request = /** @class */ (function () {
-    function Request(commonConfig) {
+class Request {
+    constructor(commonConfig) {
         this.commonConfig = {
             endpoint: commonConfig.endpoint,
             AccessKeyId: commonConfig.AccessKeyId,
@@ -70,43 +35,33 @@ var Request = /** @class */ (function () {
             Version: commonConfig.Version
         };
     }
-    Request.prototype.invoke = function (Action, config, cmd) {
-        var length = arguments.length;
-        var _action = length > 1 ? Action : undefined;
-        var _config = length > 1 ? config : Action;
-        var newConfig = Object.assign({}, this.commonConfig, _config, {
+    invoke(Action, config, cmd) {
+        const length = arguments.length;
+        const _action = length > 1 ? Action : undefined;
+        const _config = length > 1 ? config : Action;
+        const newConfig = Object.assign({}, this.commonConfig, _config, {
             Action: _action
         });
         return this.request(newConfig, cmd);
-    };
-    Request.prototype.getSignature = function (str) {
-        return pipe(stringToSign, utf8.encode, hhmac(this.commonConfig.AccessKeySecret), encode3986_1["default"])(str);
-    };
-    Request.prototype.request = function (config, cmd) {
-        return __awaiter(this, void 0, void 0, function () {
-            var flattenConfig, flattenConfigKeys, str, Signature, finalQuery;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        flattenConfig = flat_1["default"](config);
-                        flattenConfigKeys = Object.keys(flattenConfig);
-                        str = flattenConfigKeys
-                            .sort()
-                            .reduce(function (p, v, i) {
-                            return "" + p + v + "=" + flattenConfig[v] + (i < flattenConfigKeys.length - 1 ? '&' : '');
-                        }, '');
-                        return [4 /*yield*/, this.getSignature(str)];
-                    case 1:
-                        Signature = _a.sent();
-                        finalQuery = str + "&Signature=" + Signature;
-                        if (cmd === 'getQuery') {
-                            return [2 /*return*/, finalQuery];
-                        }
-                        return [2 /*return*/, request.get(this.commonConfig.endpoint + '?' + finalQuery)];
-                }
-            });
-        });
-    };
-    return Request;
-}());
-exports["default"] = Request;
+    }
+    getSignature(str) {
+        return pipe(stringToSign, utf8.encode, hhmac(this.commonConfig.AccessKeySecret), encode3986_1.default)(str);
+    }
+    async request(config, cmd) {
+        const flattenConfig = flat_1.default(config);
+        const flattenConfigKeys = Object.keys(flattenConfig);
+        const str = flattenConfigKeys
+            .sort()
+            .reduce((p, v, i) => {
+            return `${p}${v}=${flattenConfig[v]}${i < flattenConfigKeys.length - 1 ? '&' : ''}`;
+        }, '');
+        const Signature = await this.getSignature(str);
+        const finalQuery = `${str}&Signature=${Signature}`;
+        if (cmd === 'getQuery') {
+            return finalQuery;
+        }
+        return request.get(this.commonConfig.endpoint + '?' + finalQuery);
+    }
+}
+exports.default = Request;
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiaW5kZXguanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi9saWIvaW5kZXgudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7QUFBQSxNQUFNLElBQUksR0FBRyxPQUFPLENBQUMsTUFBTSxDQUFDLENBQUM7QUFDN0IsaUNBQTZCO0FBQzdCLDZDQUFrQztBQUNsQyxNQUFNLFFBQVEsR0FBRyxPQUFPLENBQUMsVUFBVSxDQUFDLENBQUM7QUFDckMsTUFBTSxJQUFJLEdBQUcsT0FBTyxDQUFDLE1BQU0sQ0FBQyxDQUFDO0FBQzdCLE1BQU0sSUFBSSxHQUFHLE9BQU8sQ0FBQyxlQUFlLENBQUMsQ0FBQTtBQUNyQyxNQUFNLE9BQU8sR0FBRyxPQUFPLENBQUMsaUJBQWlCLENBQUMsQ0FBQztBQUUzQyxTQUFTLGFBQWEsQ0FBQyxHQUFHO0lBQ3hCLE9BQU8sR0FBRyxDQUFDLENBQUMsQ0FBQyxvQkFBTSxDQUFDLEdBQUcsQ0FBQyxDQUFDLENBQUMsQ0FBQyxFQUFFLENBQUE7QUFDL0IsQ0FBQztBQUNELFNBQVMsWUFBWSxDQUFDLEdBQUc7SUFDdkIsTUFBTSxHQUFHLEdBQUksT0FBTyxhQUFhLENBQUMsR0FBRyxDQUFDLElBQUksYUFBYSxDQUFDLEdBQUcsQ0FBQyxFQUFFLENBQUM7SUFDL0QsT0FBTyxHQUFHLENBQUM7QUFDYixDQUFDO0FBRUQsU0FBUyxLQUFLLENBQUMsTUFBTTtJQUNuQixNQUFNLGVBQWUsR0FBRyxHQUFHLE1BQU0sR0FBRyxDQUFDO0lBQ3JDLE9BQU8sQ0FBQyxJQUFJLEVBQUUsRUFBRSxDQUFDLFFBQVEsQ0FBQyxlQUFlLEVBQUUsSUFBSSxDQUFDLENBQUE7QUFDbEQsQ0FBQztBQUFBLENBQUM7QUFFRixNQUFNLE9BQU87SUFFWCxZQUFZLFlBQVk7UUFDdEIsSUFBSSxDQUFDLFlBQVksR0FBRztZQUNsQixRQUFRLEVBQUUsWUFBWSxDQUFDLFFBQVE7WUFDL0IsV0FBVyxFQUFFLFlBQVksQ0FBQyxXQUFXO1lBQ3JDLGVBQWUsRUFB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
