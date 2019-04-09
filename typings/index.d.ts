@@ -1,3 +1,4 @@
+export declare function constructSignatureStr(config: any): string;
 declare class Request {
     private commonConfig;
     constructor(commonConfig: any);

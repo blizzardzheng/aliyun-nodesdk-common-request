@@ -1,6 +1,6 @@
 {
   "name": "aliyun-sdk-node-request",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "spec common request param for aliyun sdk node version",
   "main": "dist/index.js",
   "scripts": {

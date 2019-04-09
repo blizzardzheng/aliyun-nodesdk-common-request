@@ -19,6 +19,17 @@ function hhmac(secret) {
   return (last) => hmacsha1(wrapperedSecret, last)
 };
 
+export function constructSignatureStr(config) {
+  const flattenConfig = flatten(config);
+  const flattenConfigKeys = Object.keys(flattenConfig);
+  const str = flattenConfigKeys
+  .sort()
+  .reduce((p, v, i) => {
+    return `${p}${v}=${flattenConfig[v]}${i < flattenConfigKeys.length - 1 ? '&' : ''}`
+  }, '');
+  return str;
+};
+
 class Request {
   private commonConfig;
   constructor(commonConfig) {
