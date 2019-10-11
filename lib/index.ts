@@ -3,8 +3,8 @@ import flatten from './flat';
 import encode from './encode3986';
 const hmacsha1 = require('hmacsha1');
 const utf8 = require('utf8');
-const pipe = require('promised-pipe')
-const request = require('request-promise');
+const pipe = require('promised-pipe');
+const axios = require('axios');
 
 function percentEncode(str) {
   return str ? encode(str) : ''
@@ -40,7 +40,6 @@ class Request {
       Format: commonConfig.Format || 'json',
       SignatureMethod: 'HMAC-SHA1',
       SignatureVersion: '1.0',
-      SignatureNonce: uuid.v1(),
       Timestamp: new Date().toISOString(),
       RegionId: commonConfig.RegionId,
       Action: commonConfig.Action,
@@ -52,6 +51,7 @@ class Request {
     const _action = length > 1 ? Action : undefined;
     const _config = length > 1 ? config : Action;
     const newConfig = Object.assign({}, this.commonConfig, _config, {
+      SignatureNonce: uuid.v1(),
       Action: _action
     });
     return this.request(newConfig, cmd);
@@ -75,7 +75,7 @@ class Request {
     if (cmd === 'getQuery') {
       return finalQuery;
     }
-    return request.get(this.commonConfig.endpoint + '?' + finalQuery);
+    return axios.get(this.commonConfig.endpoint + '?' + finalQuery);
   }
 }
 

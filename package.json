@@ -1,6 +1,6 @@
 {
   "name": "aliyun-sdk-node-request",
-  "version": "0.0.4",
+  "version": "0.1.0-alpha.0",
   "description": "spec common request param for aliyun sdk node version",
   "main": "dist/index.js",
   "scripts": {
@@ -13,11 +13,10 @@
   "license": "ISC",
   "dependencies": {
     "@types/node": "^11.11.3",
+    "axios": "^0.18.0",
     "hmacsha1": "^1.0.0",
     "is-buffer": "^2.0.3",
     "promised-pipe": "^1.1.1",
-    "request": "^2.88.0",
-    "request-promise": "^4.2.4",
     "utf8": "^3.0.0",
     "uuid": "^3.3.2"
   },
