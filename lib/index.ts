@@ -40,7 +40,6 @@ class Request {
       Format: commonConfig.Format || 'json',
       SignatureMethod: 'HMAC-SHA1',
       SignatureVersion: '1.0',
-      Timestamp: new Date().toISOString(),
       RegionId: commonConfig.RegionId,
       Action: commonConfig.Action,
       Version: commonConfig.Version
@@ -52,6 +51,7 @@ class Request {
     const _config = length > 1 ? config : Action;
     const newConfig = Object.assign({}, this.commonConfig, _config, {
       SignatureNonce: uuid.v1(),
+      Timestamp: new Date().toISOString(),
       Action: _action
     });
     return this.request(newConfig, cmd);
